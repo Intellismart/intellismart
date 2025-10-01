@@ -20,6 +20,9 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from '@/components/ui/pagination';
 
 type Product = {
@@ -243,7 +246,7 @@ export default function MarketplacePage() {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-xl font-semibold">
-            {activeTab === 'all' ? 'All Listings' : `${categories.find(c => c.id === activeTab)?.name || ''} Listings`}
+            {activeTab === 'all' ? 'All Listings' : `${activeTab} Listings`}
           </h2>
           
           <div className="flex items-center gap-2
@@ -304,13 +307,13 @@ export default function MarketplacePage() {
                     />
                     {product.isFeatured && (
                       <div className="absolute top-2 left-2">
-                        <Badge className="bg-primary text-primary-foreground">
+                        <Badge variant="secondary" className="bg-primary text-primary-foreground">
                           Featured
                         </Badge>
                       </div>
                     )}
                     <div className="absolute bottom-2 left-2">
-                      <Badge variant="outline" className="bg-background/80">
+                      <Badge variant="outline" className="bg-background/80 backdrop-blur-sm">
                         {product.condition.charAt(0).toUpperCase() + product.condition.slice(1)}
                       </Badge>
                     </div>
@@ -364,7 +367,7 @@ export default function MarketplacePage() {
                       />
                       {product.isFeatured && (
                         <div className="absolute top-2 left-2">
-                          <Badge className="bg-primary text-primary-foreground">
+                          <Badge variant="secondary" className="bg-primary text-primary-foreground">
                             Featured
                           </Badge>
                         </div>
@@ -377,7 +380,7 @@ export default function MarketplacePage() {
                                 <h3 className="text-lg font-medium line-clamp-2">
                                   {product.title}
                                 </h3>
-                                <Badge variant="outline" className="ml-2 flex-shrink-0 bg-background">
+                                <Badge variant="outline" className="ml-2 flex-shrink-0">
                                   {product.condition.charAt(0).toUpperCase() + product.condition.slice(1)}
                                 </Badge>
                               </div>
@@ -508,7 +511,7 @@ export default function MarketplacePage() {
                 <Badge 
                   key={index} 
                   variant="outline" 
-                  className="px-3 py-1 text-sm font-normal cursor-pointer hover:bg-primary/10 bg-background"
+                  className="px-3 py-1 text-sm font-normal cursor-pointer hover:bg-primary/10"
                 >
                   {tag}
                 </Badge>
