@@ -14,6 +14,7 @@ type Sale = {
 
 export function RecentSales() {
   // Mock data - replace with actual data fetching
+  // Using placeholder avatars from ui-avatars.com
   const sales: Sale[] = [
     {
       id: '1',
@@ -21,7 +22,7 @@ export function RecentSales() {
       email: 'olivia.martin@email.com',
       amount: '$1,999.00',
       status: 'completed',
-      avatar: '/avatars/01.png',
+      avatar: 'https://ui-avatars.com/api/?name=Olivia+Martin&background=random',
     },
     {
       id: '2',
@@ -29,7 +30,7 @@ export function RecentSales() {
       email: 'jackson.lee@email.com',
       amount: '$39.00',
       status: 'completed',
-      avatar: '/avatars/02.png',
+      avatar: 'https://ui-avatars.com/api/?name=Jackson+Lee&background=random',
     },
     {
       id: '3',
@@ -37,7 +38,7 @@ export function RecentSales() {
       email: 'isabella.nguyen@email.com',
       amount: '$299.00',
       status: 'pending',
-      avatar: '/avatars/03.png',
+      avatar: 'https://ui-avatars.com/api/?name=Isabella+Nguyen&background=random',
     },
     {
       id: '4',
@@ -45,7 +46,7 @@ export function RecentSales() {
       email: 'will@email.com',
       amount: '$99.00',
       status: 'completed',
-      avatar: '/avatars/04.png',
+      avatar: 'https://ui-avatars.com/api/?name=William+Kim&background=random',
     },
     {
       id: '5',
@@ -53,18 +54,18 @@ export function RecentSales() {
       email: 'sofia.davis@email.com',
       amount: '$79.00',
       status: 'failed',
-      avatar: '/avatars/05.png',
+      avatar: 'https://ui-avatars.com/api/?name=Sofia+Davis&background=random',
     },
   ];
 
   const getStatusIcon = (status: Sale['status']) => {
     switch (status) {
       case 'completed':
-        return <Icons.check className="h-4 w-4 text-green-500" />;
+        return <span className="h-4 w-4 text-green-500"><Icons.checkCircle /></span>;
       case 'pending':
-        return <Icons.clock className="h-4 w-4 text-yellow-500" />;
+        return <span className="h-4 w-4 text-yellow-500"><Icons.clock /></span>;
       case 'failed':
-        return <Icons.x className="h-4 w-4 text-red-500" />;
+        return <span className="h-4 w-4 text-red-500"><Icons.x /></span>;
       default:
         return null;
     }

@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
 import { OverviewChart } from '@/components/overview-chart';
 import { RecentSales } from '@/components/recent-sales';
+import { Button } from '@/components/ui/button';
 
 export default function AdminDashboard() {
   // Mock data - replace with actual data fetching
@@ -43,11 +44,15 @@ export default function AdminDashboard() {
         </div>
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm">
-            <Icons.download className="mr-2 h-4 w-4" />
+            <span className="mr-2 h-4 w-4">
+              <Icons.download />
+            </span>
             Export
           </Button>
           <Button size="sm">
-            <Icons.plus className="mr-2 h-4 w-4" />
+            <span className="mr-2 h-4 w-4">
+              <Icons.plus />
+            </span>
             Add New
           </Button>
         </div>
@@ -62,11 +67,15 @@ export default function AdminDashboard() {
                 <CardTitle className="text-sm font-medium">
                   {stat.title}
                 </CardTitle>
-                <Icon className="h-4 w-4 text-muted-foreground" />
+                <span className="h-4 w-4 text-muted-foreground">
+                  <Icon />
+                </span>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">{stat.description}</p>
+                <p className="text-xs text-muted-foreground">
+                  {stat.description}
+                </p>
               </CardContent>
             </Card>
           );
@@ -150,5 +159,3 @@ export default function AdminDashboard() {
   );
 }
 
-// Add this import at the top of the file
-import { Button } from '@/components/ui/button';

@@ -55,12 +55,12 @@ export default function HomePage() {
             </div>
 
             <div className="bg-white p-8 rounded-lg shadow-lg">
-              <div className="w-16 h-16 bg-silver rounded-lg mb-6 flex items-center justify-center">
-                <span className="text-2xl">💼</span>
+              <div className="w-16 h-16 bg-green-500 rounded-lg mb-6 flex items-center justify-center">
+                <span className="text-2xl">📊</span>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Marketplace</h3>
+              <h3 className="text-xl font-semibold mb-4">Analytics</h3>
               <p className="text-gray-600">
-                Connect with service providers and find the perfect solutions for your business needs.
+                Data-driven insights to help you make informed business decisions.
               </p>
             </div>
           </div>
@@ -68,19 +68,17 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-black text-white">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl mb-8 text-gray-300">
-            Join thousands of businesses already using IntelliSMART to streamline operations and boost productivity.
+      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
+            Join thousands of businesses that trust IntelliSMART for their digital transformation needs.
           </p>
-          <button className="bg-gold hover:bg-gold/90 text-black px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
-            Start Free Trial
+          <button className="bg-white text-blue-700 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+            Get Started for Free
           </button>
         </div>
       </section>
     </div>
-  )
+  );
 }
