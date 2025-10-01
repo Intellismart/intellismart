@@ -1,0 +1,331 @@
+
+IntelliSMART Website Starter – Full Documentation (TXT)
+=======================================================
+
+Brand & Vision
+--------------
+Company: IntelliSMART
+Colours: Black (primary), Gold (highlights), Silver (platform/tooling), Red (security), Blue (data/APIs/storage)
+Tone: Professional, visionary, practical, SMB-first
+North Star: Profitable growth via recurring revenue (AI Agents + hosting + marketplace + ecommerce), low CAC, high LTV, defensibility.
+
+Tech Stack (Reference)
+----------------------
+- Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS
+- Middleware: API Gateway, GraphQL (Apollo/Helix) + REST (Next API routes), Message Queue (e.g., SQS/Service Bus), Webhooks
+- Backend: WooCommerce (WordPress), PHP 8.2+, MySQL 8, Redis (cache), Elastic/Opensearch (search) optional
+- AuthN/Z: OAuth2/OIDC (Auth0/Azure AD), MFA, RBAC/ABAC
+- Payments: Stripe + PayPal
+- Infrastructure: Azure or AWS, IaC (Terraform/Bicep), Docker, Kubernetes/Container Apps, CDN, WAF, TLS
+- Observability: OpenTelemetry, Grafana/Prometheus or Azure Monitor/CloudWatch
+- Security: Key Vault/Secrets Manager, SIEM/SOAR, DLP & audit logs
+- CI/CD: GitHub Actions or Azure DevOps Pipelines
+
+Repository Structure (Monorepo)
+-------------------------------
+intellismart/
+  ├─ apps/
+  │   ├─ web/                         # Next.js frontend (storefront, marketplace, portal, CMS pages)
+  │   ├─ admin/                       # Admin console (hidden, role-secured)
+  │   └─ api/                         # GraphQL/REST gateway (BFF + integrations)
+  ├─ services/
+  │   ├─ agents/                      # AI Agent services (workflows, RAG, automation)
+  │   ├─ inventory/                   # Inventory sync + stock control
+  │   ├─ billing/                     # Billing/Invoices/Subscriptions coordinator
+  │   ├─ marketplace/                 # Airtasker-style engine (jobs, bids, escrow)
+  │   └─ notifications/               # Email/SMS/Push
+  ├─ platforms/
+  │   ├─ woocommerce/                 # WooCommerce configs, plugins, theme
+  │   ├─ cms/                         # Headless CMS configuration (optional)
+  │   └─ search/                      # Search indexing adapters
+  ├─ infra/
+  │   ├─ terraform/                   # IaC for Azure/AWS
+  │   ├─ k8s/                         # Kubernetes manifests / container apps
+  │   └─ github-actions/              # CI/CD workflows
+  ├─ packages/
+  │   ├─ ui/                          # Shared UI components (buttons, tables, modals)
+  │   ├─ config/                      # Shared config (ESLint, TS, Tailwind)
+  │   ├─ sdk/                         # TypeScript SDK for API clients
+  │   └─ security/                    # Policy helpers, auth guards, client wrappers
+  ├─ docs/
+  │   ├─ ADRs/                        # Architecture Decision Records
+  │   └─ api/                         # OpenAPI/GraphQL schemas
+  ├─ .env.example
+  ├─ README.md
+  └─ LICENSE
+
+.env.example (Root)
+-------------------
+# Frontend
+NEXT_PUBLIC_SITE_URL=https://www.intellismart.au
+NEXT_PUBLIC_BRAND_PRIMARY=#000000
+NEXT_PUBLIC_BRAND_ACCENT_GOLD=#D4AF37
+NEXT_PUBLIC_BRAND_ACCENT_SILVER=#C0C0C0
+NEXT_PUBLIC_BRAND_ACCENT_RED=#C62828
+NEXT_PUBLIC_BRAND_ACCENT_BLUE=#1565C0
+
+# Auth
+AUTH_ISSUER_URL=
+AUTH_CLIENT_ID=
+AUTH_CLIENT_SECRET=
+AUTH_REDIRECT_URI=
+
+# Payments
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+
+# WooCommerce
+WC_BASE_URL=https://store.intellismart.au
+WC_CONSUMER_KEY=
+WC_CONSUMER_SECRET=
+
+# Messaging
+QUEUE_URL=
+WEBHOOK_SIGNING_SECRET=
+
+# DB / Cache / Search
+DATABASE_URL=
+REDIS_URL=
+SEARCH_URL=
+
+# Observability
+OTEL_EXPORTER_OTLP_ENDPOINT=
+
+# Email/SMS
+SENDGRID_API_KEY=
+TWILIO_API_KEY=
+
+Frontend (apps/web) – Pages & Components
+----------------------------------------
+/app
+  /(public)
+    /page.tsx                     # Homepage (Hero + features + CTAs)
+    /pricing/page.tsx             # Pricing table (Starter/Pro/Enterprise/Custom)
+    /store/page.tsx               # Product listing (WooCommerce integration)
+    /marketplace/page.tsx         # Jobs board (post/bid)
+    /news/page.tsx                # CMS/blog index
+    /contact/page.tsx             # Contact form
+  /portal
+    /page.tsx                     # Account dashboard (orders, invoices, subscriptions, tickets)
+  /(auth)
+    /login/page.tsx               # Login (SSO/MFA)
+    /register/page.tsx            # Registration (if allowed)
+/components
+  Hero.tsx
+  PricingTable.tsx
+  ProductCard.tsx
+  Navbar.tsx
+  Footer.tsx
+  Guard.tsx                       # Auth guard (RBAC)
+/lib
+  apiClient.ts                    # SDK client
+  auth.ts                         # token helpers
+  woo.ts                          # WooCommerce REST client
+/styles
+  globals.css
+  theme.css
+
+Admin (apps/admin)
+------------------
+/app
+  /page.tsx                       # Admin dashboard
+  /catalog/page.tsx               # Products/Categories/Promos
+  /inventory/page.tsx             # Stock & warehouses
+  /pricing/page.tsx               # Price lists / subscriptions
+  /orders/page.tsx                # Orders & refunds
+  /marketplace/page.tsx           # Jobs, bids, escrow controls
+  /customers/page.tsx             # CRM-lite
+  /content/page.tsx               # CMS pages (news/contact/SEO)
+  /security/page.tsx              # Roles, policies, API keys
+  /observability/page.tsx         # Logs, metrics, traces
+  /settings/page.tsx              # Feature flags, branding, menus
+
+API Gateway (apps/api)
+----------------------
+/src
+  /graphql
+    schema.graphql                # Types + resolvers for products, orders, subs, jobs, users
+    resolvers/
+  /rest
+    products.ts                   # GET /products, POST /products (admin)
+    orders.ts                     # POST /orders, GET /orders/:id
+    subscriptions.ts
+    inventory.ts
+    invoices.ts
+    auth.ts                       # login/register/hooks
+    marketplace.ts                # post job, bid, escrow ops
+  /integrations
+    stripe.ts, paypal.ts
+    woocommerce.ts
+    logistics.ts
+    notifications.ts
+    identity.ts                   # OIDC
+  /middleware
+    authGuard.ts                  # RBAC/ABAC
+    rateLimit.ts
+    signing.ts                    # webhook verifiers
+  /events
+    publisher.ts, consumer.ts     # queues
+  /observability
+    telemetry.ts
+  index.ts
+
+Core Data Model (Reference)
+---------------------------
+Product { id, sku, name, description, categoryId, images[], price, currency, taxClass, promo, attributes{}, subscriptionEligible, stockTracking, createdAt, updatedAt }
+Inventory { productId, warehouseId, stockLevel, reserved, reorderPoint, updatedAt }
+Order { id, userId, items[{productId, qty, price}], totals{net,tax,shipping,grand}, payment{method, status, txId}, status, invoiceId, createdAt }
+Subscription { id, userId, planId, status, startedAt, nextBillingDate, cancelAt }
+User { id, email, roles[], mfaEnabled, profile{} }
+Invoice { id, orderId, number, amount, tax, pdfUrl, status, issuedAt }
+
+OpenAPI (Sketch) – REST
+-----------------------
+GET /api/products?category&search&minPrice&maxPrice
+POST /api/products (admin) { name, sku, price, taxClass, stockLevel, ... }
+PATCH /api/products/{id} (admin) { price?, promo?, stockLevel?, attributes? }
+POST /api/orders { items[], paymentMethod }
+GET /api/orders/{id}
+PATCH /api/orders/{id} (admin) { status }
+POST /api/subscriptions { planId }
+GET /api/subscriptions/{id}
+PATCH /api/subscriptions/{id} { status }
+GET /api/inventory/{productId}
+PATCH /api/inventory/{productId} (admin) { adjust }
+GET /api/invoices/{id}
+POST /api/invoices (system) { orderId }
+POST /api/auth/login { code }
+POST /api/auth/register { email, ... }
+
+GraphQL (schema.graphql – Sketch)
+----------------------------------
+type Product { id: ID!, sku: String!, name: String!, price: Money!, stock: Int!, subscriptionEligible: Boolean! }
+type Order { id: ID!, items: [OrderItem!]!, totals: Totals!, status: String! }
+type Subscription { id: ID!, planId: ID!, status: String!, nextBillingDate: Date! }
+type Query {
+  products(filter: ProductFilter): [Product!]!
+  product(id: ID!): Product
+  order(id: ID!): Order
+}
+type Mutation {
+  createOrder(input: OrderInput!): Order!
+  updateProduct(id: ID!, input: ProductUpdate!): Product!
+  startSubscription(planId: ID!): Subscription!
+}
+
+WooCommerce Integration Notes
+-----------------------------
+- Use WC REST API v3 (consumer key/secret) for products, inventory, orders, coupons, subscriptions (via plugin).
+- Sync strategy:
+  - Admin updates in Woo (catalog/pricing/stock) → webhook to apps/api → cache invalidate → reflect on frontend.
+  - Orders created via API → WC generates invoice → store PDF url → notify customer.
+- Security: rotate keys, IP allow-list, webhook signature verification.
+
+Security & Compliance Checklist
+-------------------------------
+- WAF + CDN, TLS 1.2+, HSTS
+- OAuth2/OIDC, MFA mandatory for admin, RBAC/ABAC
+- Secrets in Key Vault/Secrets Manager only
+- SBOM + dependency scanning + container image signing
+- SIEM ingest (auth events, order mutations, payouts)
+- DLP rules for PII/PCI; tokenization where possible
+- Backups: daily DB, hourly WAL, object storage versioning; recovery drills
+- Privacy by design: data minimization, retention policies
+
+CI/CD (GitHub Actions – Outline)
+--------------------------------
+- Triggers: PR, push to main, tag release
+- Jobs:
+  1) Lint/Test/Typecheck
+  2) Build (web, admin, api, services)
+  3) Security scans (SAST/Dependabot/Trivy)
+  4) Provision/Plan (Terraform plan)
+  5) Deploy (blue/green or canary)
+  6) Smoke tests + rollback on failure
+- Artifacts: SBOM, container images, build manifests
+
+Infrastructure as Code (Terraform – Skeleton)
+---------------------------------------------
+infra/terraform/
+  main.tf, variables.tf, outputs.tf
+  modules/
+    networking/ (VPC/VNet, subnets, gateways, WAF, CDN)
+    compute/ (AKS/EKS or Container Apps, autoscaling)
+    data/ (RDS/Aurora/MySQL, Redis, S3/Blob)
+    identity/ (OIDC, groups, roles)
+    observability/ (OTel collector, logs/metrics/traces)
+    security/ (Key Vault/Secrets, SIEM connectors)
+    dns/ (zones, certs)
+
+90-Day Technical Roadmap (Condensed)
+------------------------------------
+0–30: Infra + WooCommerce + Frontend shell + Payments live + Admin auth
+31–60: API Gateway + IAM (MFA/RBAC) + Notifications + Inventory sync + Observability
+61–90: AI Agents (Starter) + Marketplace MVP + Portal (invoices/subscriptions) + SEO launch
+
+Acceptance Criteria (Key)
+-------------------------
+- Checkout E2E with Stripe/PayPal; orders/invoices visible in portal
+- Admin stock/price update reflects on storefront < 60s
+- MFA enforced for admin; RBAC gates all admin routes
+- Logs/traces searchable; 99.9% uptime with health checks
+- Backup/restore validated; recovery < RTO/RPO targets
+
+Starter Code Stubs (Illustrative)
+---------------------------------
+apps/web/lib/woo.ts
+-------------------
+export async function listProducts(params: Record<string,string>) {
+  const url = new URL(`${process.env.WC_BASE_URL}/wp-json/wc/v3/products`);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, String(v)));
+  const res = await fetch(url.toString(), {
+    headers: {
+      Authorization: 'Basic ' + Buffer.from(`${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`).toString('base64')
+    },
+    cache: 'no-store'
+  });
+  if (!res.ok) throw new Error('WooCommerce API error');
+  return res.json();
+}
+
+apps/api/rest/orders.ts (pseudo)
+--------------------------------
+POST /api/orders -> validate body -> create WC order via REST -> generate invoice -> publish event -> return order
+
+apps/api/middleware/authGuard.ts (pseudo)
+-----------------------------------------
+- Verify JWT/OIDC token
+- Fetch roles/claims
+- Enforce RBAC/ABAC policies
+- Attach identity to request context
+
+How to Run (Local – Outline)
+----------------------------
+1) Copy .env.example → .env and fill secrets.
+2) Start WooCommerce locally or point to managed WP host with https and API keys.
+3) `npm install` at repo root; build shared packages first.
+4) `npm run dev:web` → Next.js web; `npm run dev:admin`; `npm run dev:api`.
+5) Seed data via scripts or WC import CSV.
+6) Use ngrok for webhooks testing if needed.
+
+SEO & Content
+-------------
+- Semantic headings, JSON-LD for products/breadcrumbs, sitemap.xml, robots.txt
+- Blog clusters: AI Agents for SMB, Security & Compliance, Smart Office, Cloud Migrations
+- CTAs aligned to pricing; lead magnets (security checklist PDF)
+
+Risk Register (Initial)
+-----------------------
+- WooCommerce scale limits → cache aggressively, offload search, async webhooks
+- Key sprawl → consolidate secrets, rotate quarterly
+- Payment disputes/fraud → 3DS, risk scoring, manual review for high-value
+- Vendor lock-in → abstract integrations behind the API gateway
+
+License & Attribution
+---------------------
+- Review WooCommerce plugin licenses
+- Include OSS licenses in /licenses, generate at build time
+
+End of Document.

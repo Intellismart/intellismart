@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-brand-primary: #000000;
+    --color-brand-accent-gold: #D4AF37;
+    --color-brand-accent-silver: #C0C0C0;
+    --color-brand-accent-red: #C62828;
+    --color-brand-accent-blue: #1565C0;
+  }
+}
+
+@layer components {
+  .bg-gold {
+    background-color: var(--color-brand-accent-gold);
+  }
+  .bg-silver {
+    background-color: var(--color-brand-accent-silver);
+  }
+  .bg-blue {
+    background-color: var(--color-brand-accent-blue);
+  }
+  .bg-red {
+    background-color: var(--color-brand-accent-red);
+  }
+  .text-gold {
+    color: var(--color-brand-accent-gold);
+  }
+  .text-silver {
+    color: var(--color-brand-accent-silver);
+  }
+  .text-blue {
+    color: var(--color-brand-accent-blue);
+  }
+  .text-red {
+    color: var(--color-brand-accent-red);
+  }
+  .border-gold {
+    border-color: var(--color-brand-accent-gold);
+  }
+}
