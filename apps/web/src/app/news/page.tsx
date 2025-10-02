@@ -1,59 +1,138 @@
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+
+type Author = {
+  name: string;
+  role: string;
+  avatar: string;
+};
+
+type BlogPost = {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: Author;
+  date: string;
+  readTime: string;
+  category: string;
+  featured: boolean;
+  image: string;
+  slug: string;
+};
+
 export default function NewsPage() {
-  const featuredPost = {
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
+  const [activeCategory, setActiveCategory] = useState('All Posts');
+  const featuredPost: BlogPost = {
+    id: '1',
     title: 'AI Agents Revolutionizing SMB Operations in 2024',
     excerpt: 'Discover how artificial intelligence is transforming small and medium businesses, from customer service automation to predictive analytics.',
-    author: 'Sarah Johnson',
-    date: 'December 15, 2024',
+    content: 'Full article content would go here...',
+    author: {
+      name: 'Sarah Johnson',
+      role: 'AI Specialist',
+      avatar: '/team/sarah-johnson.jpg'
+    },
+    date: '2024-12-15',
     readTime: '5 min read',
-    image: '🤖',
-    category: 'AI & Technology'
+    image: '/blog/ai-revolution.jpg',
+    category: 'AI & Technology',
+    featured: true,
+    slug: 'ai-agents-revolutionizing-smb-operations-2024'
   }
 
-  const blogPosts = [
+  const blogPosts: BlogPost[] = [
     {
+      id: '2',
       title: '5 Essential Security Practices for Modern Businesses',
       excerpt: 'Protect your business with these fundamental cybersecurity measures that every SMB should implement.',
-      author: 'Mike Chen',
-      date: 'December 12, 2024',
+      content: 'Full article content would go here...',
+      author: {
+        name: 'Mike Chen',
+        role: 'Security Expert',
+        avatar: '/team/mike-chen.jpg'
+      },
+      date: '2024-12-12',
       readTime: '7 min read',
+      image: '/blog/security-practices.jpg',
       category: 'Security',
-      featured: false
+      featured: false,
+      slug: 'essential-security-practices-modern-businesses'
     },
     {
+      id: '3',
       title: 'Building Your First AI Agent: A Complete Guide',
       excerpt: 'Step-by-step tutorial on creating and deploying your first intelligent agent for business automation.',
-      author: 'Alex Rodriguez',
-      date: 'December 10, 2024',
+      content: 'Full article content would go here...',
+      author: {
+        name: 'Alex Rodriguez',
+        role: 'AI Engineer',
+        avatar: '/team/alex-rodriguez.jpg'
+      },
+      date: '2024-12-10',
       readTime: '12 min read',
+      image: '/blog/ai-agent-guide.jpg',
       category: 'Tutorials',
-      featured: false
+      featured: false,
+      slug: 'building-first-ai-agent-complete-guide'
     },
     {
+      id: '4',
       title: 'Cloud Migration Strategies for Growing Businesses',
       excerpt: 'Learn the best practices for migrating your infrastructure to the cloud without disrupting operations.',
-      author: 'Emma Thompson',
-      date: 'December 8, 2024',
+      content: 'Full article content would go here...',
+      author: {
+        name: 'Emma Thompson',
+        role: 'Cloud Architect',
+        avatar: '/team/emma-thompson.jpg'
+      },
+      date: '2024-12-08',
       readTime: '8 min read',
+      image: '/blog/cloud-migration.jpg',
       category: 'Cloud Services',
-      featured: false
+      featured: false,
+      slug: 'cloud-migration-strategies-growing-businesses'
     },
     {
+      id: '5',
       title: 'The Future of Smart Office Technology',
       excerpt: 'Exploring how IoT and AI are reshaping the modern workplace for increased productivity and efficiency.',
-      author: 'David Kim',
-      date: 'December 5, 2024',
+      content: 'Full article content would go here...',
+      author: {
+        name: 'David Kim',
+        role: 'IoT Specialist',
+        avatar: '/team/david-kim.jpg'
+      },
+      date: '2024-12-05',
       readTime: '6 min read',
+      image: '/blog/smart-office.jpg',
       category: 'Smart Office',
-      featured: false
+      featured: false,
+      slug: 'future-smart-office-technology'
     },
     {
+      id: '6',
       title: 'E-commerce Trends That Will Define 2025',
       excerpt: 'Stay ahead of the curve with these emerging trends in online retail and digital commerce.',
-      author: 'Lisa Wang',
-      date: 'December 3, 2024',
+      content: 'Full article content would go here...',
+      author: {
+        name: 'Lisa Wang',
+        role: 'E-commerce Strategist',
+        avatar: '/team/lisa-wang.jpg'
+      },
+      date: '2024-12-03',
       readTime: '9 min read',
+      image: '/blog/ecommerce-trends.jpg',
       category: 'E-commerce',
-      featured: false
+      featured: false,
+      slug: 'ecommerce-trends-2025'
     }
   ]
 
@@ -66,122 +145,199 @@ export default function NewsPage() {
     'E-commerce',
     'Tutorials',
     'Business Insights'
-  ]
+  ];
+
+  // Filter posts by active category
+  const filteredPosts = activeCategory === 'All Posts' 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === activeCategory);
+
+  // Get current posts for pagination
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Format date
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
-    <div className="bg-white py-24">
+    <div className="bg-white py-12 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">IntelliSMART Blog</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <header className="text-center mb-12 md:mb-16">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6">IntelliSMART Blog</h1>
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             Insights, tutorials, and industry trends for modern business leaders
           </p>
-        </div>
+        </header>
 
         {/* Categories */}
-        <div className="mb-12">
-          <div className="flex flex-wrap gap-4 justify-center">
+        <nav aria-label="Blog categories" className="mb-12">
+          <div className="flex flex-wrap gap-2 md:gap-4 justify-center">
             {categories.map((category) => (
               <button
                 key={category}
-                className="bg-gray-100 hover:bg-gold hover:text-black px-4 py-2 rounded-lg font-semibold transition-colors"
+                onClick={() => {
+                  setActiveCategory(category);
+                  setCurrentPage(1);
+                }}
+                className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-medium text-sm md:text-base transition-colors ${
+                  activeCategory === category
+                    ? 'bg-gold text-black'
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
+                }`}
+                aria-current={activeCategory === category ? 'page' : undefined}
               >
                 {category}
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Featured Post */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold mb-8">Featured Article</h2>
-          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg">
-            <div className="md:flex">
-              <div className="md:w-1/2 p-8">
-                <div className="mb-4">
-                  <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                    {featuredPost.category}
-                  </span>
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">{featuredPost.title}</h3>
-                <p className="text-gray-600 mb-6 line-clamp-3">{featuredPost.excerpt}</p>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-                      <span className="text-sm font-semibold">{featuredPost.author.split(' ').map(n => n[0]).join('')}</span>
-                    </div>
-                    <div>
-                      <p className="font-semibold">{featuredPost.author}</p>
-                      <p className="text-sm text-gray-500">{featuredPost.date} • {featuredPost.readTime}</p>
-                    </div>
-                  </div>
-                  <button className="bg-gold hover:bg-gold/90 text-black px-6 py-2 rounded-lg font-semibold transition-colors">
-                    Read More
-                  </button>
-                </div>
-              </div>
-              <div className="md:w-1/2 bg-gray-100 flex items-center justify-center p-8">
-                <span className="text-8xl">{featuredPost.image}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        </nav>
 
         {/* Blog Posts Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post, index) => (
-            <article key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-              <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                <span className="text-4xl">📝</span>
-              </div>
-              <div className="p-6">
-                <div className="mb-3">
-                  <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                    {post.category}
-                  </span>
+        <section aria-labelledby="blog-posts" className="mt-16">
+          <h2 id="blog-posts" className="text-2xl font-bold mb-8">Latest Articles</h2>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {currentPosts.map((post) => (
+              <article key={post.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="h-48 bg-gray-100 relative">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 line-clamp-2">{post.title}</h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mr-2">
-                      <span className="text-xs font-semibold">{post.author.split(' ').map(n => n[0]).join('')}</span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">{post.author}</p>
-                      <p className="text-xs text-gray-500">{post.date} • {post.readTime}</p>
-                    </div>
+                <div className="p-6">
+                  <div className="flex items-center mb-3">
+                    <Badge variant="secondary" className="bg-gold/10 text-gold hover:bg-gold/20">
+                      {post.category}
+                    </Badge>
+                    <time dateTime={post.date} className="ml-3 text-sm text-gray-500">
+                      {formatDate(post.date)}
+                    </time>
+                      height={40}
+                      className="object-cover w-full h-full"
+                    />
                   </div>
-                  <button className="text-gold hover:text-gold/80 font-semibold">
-                    Read →
-                  </button>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    <Link href={`/news/${post.slug}`} className="hover:text-gold transition-colors">
+                      {post.title}
+                    </Link>
+                  </h3>
+                  <p className="text-gray-600 mb-4">{post.excerpt}</p>
+                  <div className="flex items-center mt-4">
+                    <div className="h-10 w-10 rounded-full bg-gray-200 overflow-hidden">
+                      <Image
+                        src={post.author.avatar}
+                        alt={`${post.author.name}, ${post.author.role}`}
+                        width={40}
+                        height={40}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-gray-900">
+                        {post.author.name}
+                      </p>
+                      <p className="text-xs text-gray-500">{post.readTime}</p>
+                    </div>
+                    <Link 
+                      href={`/news/${post.slug}`} 
+                      className="ml-auto text-gold hover:text-gold/80 font-semibold flex items-center"
+                      aria-label={`Read more about ${post.title}`}
+                    >
+                      Read <Icons.arrowRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Newsletter Signup */}
-        <div className="mt-16 bg-black text-white p-12 rounded-lg text-center">
-          <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-          <p className="text-xl mb-8 text-gray-300">
-            Get the latest insights and trends delivered to your inbox
-          </p>
-          <div className="max-w-md mx-auto flex gap-4">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 p-3 rounded-lg text-black"
-            />
-            <button className="bg-gold hover:bg-gold/90 text-black px-6 py-3 rounded-lg font-semibold transition-colors">
-              Subscribe
-            </button>
+              </article>
+            ))}
           </div>
-        </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage > 1) setCurrentPage(currentPage - 1);
+                      }}
+                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink 
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentPage(page);
+                        }}
+                        isActive={currentPage === page}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext 
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                      }}
+                      className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
+        </section>
       </div>
+
+      {/* Newsletter Subscription */}
+        <section className="bg-gray-50 mt-16 py-16">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Subscribe to our newsletter</h2>
+            <p className="text-gray-600 mb-6">
+              Get the latest articles, news and resources delivered straight to your inbox.
+            </p>
+            <form className="max-w-md mx-auto flex gap-2">
+              <label htmlFor="email-address" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email-address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="min-w-0 flex-auto rounded-md border border-gray-300 bg-white px-3.5 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-gold focus:border-gold sm:text-sm"
+                placeholder="Enter your email"
+              />
+              <Button type="submit" className="bg-gold hover:bg-gold/90 text-black">
+                Subscribe
+              </Button>
+            </form>
+          </div>
+        </section>
     </div>
   )
 }

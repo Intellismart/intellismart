@@ -8,7 +8,12 @@ export default function AnalyticsPage() {
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Analytics</h2>
         <div className="flex items-center space-x-2">
-          <select className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
+          <label htmlFor="timeRange" className="sr-only">Select time range</label>
+          <select 
+            id="timeRange"
+            className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+            aria-label="Select time range for analytics"
+          >
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>Last 3 months</option>
@@ -64,7 +69,7 @@ export default function AnalyticsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-                <Icons.activity className="h-4 w-4 text-muted-foreground" />
+                <Icons.clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+573</div>
@@ -93,7 +98,7 @@ export default function AnalyticsPage() {
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div key={i} className="flex items-center">
                       <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center mr-3">
-                        <Icons.user className="h-4 w-4" />
+                        <Icons.users className="h-4 w-4" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium leading-none">Olivia Martin</p>

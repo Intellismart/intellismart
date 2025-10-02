@@ -38,27 +38,30 @@ export default function SettingsPage() {
               <Label htmlFor="store-description">Store Description</Label>
               <textarea
                 id="store-description"
+                name="store-description"
                 rows={3}
                 className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 defaultValue="AI-powered business solutions for the modern enterprise."
+                aria-describedby="store-description-help"
+                placeholder="Enter store description"
+                aria-label="Store description"
               />
-              <p className="text-sm text-muted-foreground">
+              <p id="store-description-help" className="text-sm text-muted-foreground">
                 A brief description of your store.
               </p>
-            </div>
-
-            <div className="grid gap-3">
               <Label htmlFor="timezone">Timezone</Label>
               <select
                 id="timezone"
+                name="timezone"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                defaultValue="GMT+8"
+                defaultValue="UTC"
+                aria-label="Select timezone"
+                aria-required="true"
               >
                 <option value="GMT-12">(GMT-12:00) International Date Line West</option>
                 <option value="GMT-11">(GMT-11:00) Midway Island, Samoa</option>
                 <option value="GMT-10">(GMT-10:00) Hawaii</option>
                 <option value="GMT-8">(GMT-08:00) Pacific Time (US & Canada)</option>
-                <option value="GMT-7">(GMT-07:00) Mountain Time (US & Canada)</option>
                 <option value="GMT-6">(GMT-06:00) Central Time (US & Canada)</option>
                 <option value="GMT-5">(GMT-05:00) Eastern Time (US & Canada)</option>
                 <option value="GMT">(GMT) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
@@ -97,8 +100,10 @@ export default function SettingsPage() {
               <Label htmlFor="currency">Currency</Label>
               <select
                 id="currency"
+                name="currency"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 defaultValue="USD"
+                aria-label="Select currency"
               >
                 <option value="USD">US Dollar (USD)</option>
                 <option value="EUR">Euro (EUR)</option>
@@ -116,8 +121,10 @@ export default function SettingsPage() {
               <Label htmlFor="weight-unit">Weight Unit</Label>
               <select
                 id="weight-unit"
+                name="weight-unit"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 defaultValue="kg"
+                aria-label="Select weight unit"
               >
                 <option value="kg">Kilograms (kg)</option>
                 <option value="g">Grams (g)</option>
@@ -130,8 +137,10 @@ export default function SettingsPage() {
               <Label htmlFor="dimension-unit">Dimension Unit</Label>
               <select
                 id="dimension-unit"
+                name="dimension-unit"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 defaultValue="cm"
+                aria-label="Select dimension unit"
               >
                 <option value="cm">Centimeters (cm)</option>
                 <option value="m">Meters (m)</option>
